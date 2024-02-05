@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
 import { db } from '@/app/_lib/prisma'
@@ -17,7 +16,6 @@ export default async function BarbershopDetailsPage({
   params,
 }: BarbershopDetailsPageProps) {
   const session = await getServerSession(authOptions)
-  const router = useRouter()
 
   if (!params.id) {
     // TODO redirecionar para home page
@@ -34,7 +32,8 @@ export default async function BarbershopDetailsPage({
   })
 
   if (!barbershop) {
-    return router.replace('/')
+    // TODO redirecionar para home page
+    return null
   }
 
   return (
