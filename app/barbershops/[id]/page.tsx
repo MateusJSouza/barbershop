@@ -1,8 +1,8 @@
-import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from 'lucide-react'
-import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 
-import { Button } from '@/app/_components/ui/button'
 import { db } from '@/app/_lib/prisma'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
 import BarbershopInfo from './_components/barbershop-info'
 import ServiceItem from './_components/service-item'
@@ -16,6 +16,9 @@ interface BarbershopDetailsPageProps {
 export default async function BarbershopDetailsPage({
   params,
 }: BarbershopDetailsPageProps) {
+  const session = await getServerSession(authOptions)
+  const router = useRouter()
+
   if (!params.id) {
     // TODO redirecionar para home page
     return null
@@ -31,8 +34,7 @@ export default async function BarbershopDetailsPage({
   })
 
   if (!barbershop) {
-    // TODO redirecionar para home page
-    return null
+    return router.replace('/')
   }
 
   return (
@@ -41,7 +43,11 @@ export default async function BarbershopDetailsPage({
 
       <div className="px-5 flex flex-col gap-4 py-6">
         {barbershop.services.map((service) => (
-          <ServiceItem service={service} key={service.id} />
+          <ServiceItem
+            service={service}
+            key={service.id}
+            isAuthenticated={!!session?.user}
+          />
         ))}
       </div>
     </div>
