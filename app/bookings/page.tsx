@@ -1,4 +1,3 @@
-import { isFuture, isPast } from 'date-fns'
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
@@ -15,18 +14,33 @@ export default async function BookingsPage() {
     redirect('/')
   }
 
-  const bookings = await db.booking.findMany({
-    where: {
-      userId: (session.user as any).id,
-    },
-    include: {
-      service: true,
-      barbershop: true,
-    },
-  })
+  const [confirmedBookings, finishedBookings] = await Promise.all([
+    await db.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          gte: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
 
-  const confirmedBookings = bookings.filter((booking) => isFuture(booking.date))
-  const finishedBookings = bookings.filter((booking) => isPast(booking.date))
+    await db.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          lt: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+  ])
 
   return (
     <>

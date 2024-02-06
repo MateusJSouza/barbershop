@@ -2,6 +2,7 @@
 
 import { MenuIcon } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import SideMenu from './side-menu'
 import { Button } from './ui/button'
@@ -12,7 +13,9 @@ export function Header() {
   return (
     <Card>
       <CardContent className="p-5 flex items-center justify-between flex-row">
-        <Image src="/logo.png" alt="FSW Barber" height={22} width={120} />
+        <Link href="/">
+          <Image src="/logo.png" alt="FSW Barber" height={22} width={120} />
+        </Link>
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="w-8 h-8">
