@@ -49,9 +49,11 @@ export default async function BookingsPage() {
       <div className="px-5 py-6">
         <h1 className="font-bold text-sm">Agendamentos</h1>
 
-        <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
-          Confirmados
-        </h2>
+        {confirmedBookings.length === 0 && finishedBookings.length === 0 && (
+          <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
+            Confirmados
+          </h2>
+        )}
 
         <div className="space-y-3">
           {confirmedBookings.map((booking) => (
