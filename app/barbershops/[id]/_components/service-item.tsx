@@ -5,8 +5,10 @@ import { format, setHours, setMinutes } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 import { useMemo, useState } from 'react'
+import { toast } from 'sonner'
 
 import { Button } from '@/app/_components/ui/button'
 import { Calendar } from '@/app/_components/ui/calendar'
@@ -34,11 +36,13 @@ export default function ServiceItem({
   isAuthenticated,
   barbershop,
 }: ServiceItemProps) {
+  const router = useRouter()
   const { data } = useSession()
 
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState<string | undefined>(undefined)
   const [submitIsLoading, setSubmitIsLoading] = useState(false)
+  const [sheetIsOpen, setSheetIsOpen] = useState(false)
 
   function handleDateClick(date: Date | undefined) {
     setDate(date)
@@ -72,8 +76,23 @@ export default function ServiceItem({
       await saveBooking({
         serviceId: service.id,
         barbershopId: barbershop.id,
-        date: String(newDate),
+        date: newDate,
         userId: (data.user as any).id,
+      })
+
+      setSheetIsOpen(false)
+
+      setHour(undefined)
+      setDate(undefined)
+
+      toast.success('Reserva realizada com sucesso!', {
+        description: format(newDate, "'Para' dd 'de' MMMM 'às' HH':'mm'.'", {
+          locale: ptBR,
+        }),
+        action: {
+          label: 'Visualizar',
+          onClick: () => router.push('/bookings'),
+        },
       })
     } catch (error) {
       console.log(error)
@@ -112,7 +131,7 @@ export default function ServiceItem({
                 }).format(Number(service.price))}
               </p>
 
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger asChild>
                   <Button variant="secondary" onClick={handleBookingClick}>
                     Reservar
@@ -159,7 +178,7 @@ export default function ServiceItem({
 
                   {/* Mostrar lista de horários apenas se alguma data for selecionada */}
                   {date && (
-                    <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden py-6 px-5 border-t border-solid border-secondary">
+                    <div className="flex gap-3 overflow-x-auto py-6 px-5 border-t border-solid border-secondary [&::-webkit-scrollbar]:hidden">
                       {timeList.map((time) => (
                         <Button
                           variant={hour === time ? 'default' : 'outline'}

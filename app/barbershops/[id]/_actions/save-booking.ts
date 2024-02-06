@@ -6,7 +6,7 @@ interface SaveBookingParams {
   barbershopId: string
   serviceId: string
   userId: string
-  date: string
+  date: Date
 }
 
 export default async function saveBooking({
