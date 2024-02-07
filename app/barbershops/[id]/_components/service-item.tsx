@@ -274,6 +274,7 @@ export default function ServiceItem({
                     <Button
                       onClick={handleBookingSubmit}
                       disabled={!hour || !date || submitIsLoading}
+                      className="w-full"
                     >
                       {submitIsLoading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
