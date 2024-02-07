@@ -1,5 +1,7 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+
 import { db } from '@/app/_lib/prisma'
 
 interface SaveBookingParams {
@@ -23,4 +25,7 @@ export default async function saveBooking({
       barbershopId,
     },
   })
+
+  revalidatePath('/')
+  revalidatePath('/bookings')
 }
