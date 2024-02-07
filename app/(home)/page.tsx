@@ -13,23 +13,29 @@ export default async function Home() {
   // sessão do usuário autenticado
   const session = await getServerSession(authOptions)
 
-  const [barbershops, confirmedBookings] = await Promise.all([
-    await db.barbershop.findMany({}),
-    session?.user
-      ? await db.booking.findMany({
-          where: {
-            userId: (session.user as any).id,
-            date: {
-              gte: new Date(),
+  const [barbershops, recommendedBarbershops, confirmedBookings] =
+    await Promise.all([
+      await db.barbershop.findMany({}),
+      db.barbershop.findMany({
+        orderBy: {
+          id: 'asc',
+        },
+      }),
+      session?.user
+        ? await db.booking.findMany({
+            where: {
+              userId: (session.user as any).id,
+              date: {
+                gte: new Date(),
+              },
             },
-          },
-          include: {
-            service: true,
-            barbershop: true,
-          },
-        })
-      : Promise.resolve([]),
-  ])
+            include: {
+              service: true,
+              barbershop: true,
+            },
+          })
+        : Promise.resolve([]),
+    ])
 
   return (
     <div>
@@ -88,7 +94,7 @@ export default async function Home() {
         </h2>
 
         <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {barbershops.map((barbershop) => (
+          {recommendedBarbershops.map((barbershop) => (
             <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
               <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             </div>
