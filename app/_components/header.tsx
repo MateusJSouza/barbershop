@@ -11,23 +11,25 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 
 export function Header() {
   return (
-    <Card>
-      <CardContent className="p-5 flex items-center justify-between flex-row">
-        <Link href="/">
-          <Image src="/logo.png" alt="FSW Barber" height={22} width={120} />
-        </Link>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="w-8 h-8">
-              <MenuIcon size={16} />
-            </Button>
-          </SheetTrigger>
+    <header>
+      <Card>
+        <CardContent className="p-5 flex items-center justify-between flex-row">
+          <Link href="/">
+            <Image src="/logo.png" alt="FSW Barber" height={22} width={120} />
+          </Link>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="w-8 h-8">
+                <MenuIcon size={16} />
+              </Button>
+            </SheetTrigger>
 
-          <SheetContent className="p-0">
-            <SideMenu />
-          </SheetContent>
-        </Sheet>
-      </CardContent>
-    </Card>
+            <SheetContent className="p-0">
+              <SideMenu />
+            </SheetContent>
+          </Sheet>
+        </CardContent>
+      </Card>
+    </header>
   )
 }
