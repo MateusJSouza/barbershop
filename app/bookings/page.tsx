@@ -2,9 +2,9 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 
 import { Header } from '../_components/header'
+import { authOptions } from '../_lib/auth'
 import { db } from '../_lib/prisma'
 import { BookingItem } from '../(home)/_components/booking-item'
-import { authOptions } from '../api/auth/[...nextauth]/route'
 
 export default async function BookingsPage() {
   // recuperar a sessão do usuário
