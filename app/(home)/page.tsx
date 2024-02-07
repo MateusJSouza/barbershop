@@ -89,7 +89,7 @@ export default async function Home() {
 
         <div className="flex px-5 gap-4 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {barbershops.map((barbershop) => (
-            <div key={barbershop.id}>
+            <div key={barbershop.id} className="min-w-[167px] max-w-[167px]">
               <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             </div>
           ))}
