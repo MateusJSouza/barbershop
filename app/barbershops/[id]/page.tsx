@@ -7,24 +7,25 @@ import BarbershopInfo from './_components/barbershop-info'
 import ServiceItem from './_components/service-item'
 
 interface BarbershopDetailsPageProps {
-  params: {
+  params: Promise<{
     id?: string
-  }
+  }>
 }
 
 export default async function BarbershopDetailsPage({
   params,
 }: BarbershopDetailsPageProps) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
 
-  if (!params.id) {
+  if (!id) {
     // TODO redirecionar para home page
     return null
   }
 
   const barbershop = await db.barbershop.findUnique({
     where: {
-      id: params.id,
+      id,
     },
     include: {
       services: true,

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm audit)",
+      "Bash(npm install prisma@5.9.1 --save-dev)",
+      "Bash(npm audit fix)",
+      "Bash(npm info next versions --json)",
+      "Bash(node -e \"const v=JSON.parse\\(require\\(''fs''\\).readFileSync\\(''/dev/stdin'',''utf8''\\)\\); console.log\\(v.filter\\(x=>x.startsWith\\(''15.''\\)\\).slice\\(-5\\).join\\(''\\\\n''\\)\\)\")",
+      "Bash(npm info next dist-tags)",
+      "Bash(npm install next@^15 eslint-config-next@^15)",
+      "Bash(npm run build)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\Mateus\\.claude\\projects\\c--Users-Mateus-Documents-barbershop\\memory"
+    ]
+  }
+}

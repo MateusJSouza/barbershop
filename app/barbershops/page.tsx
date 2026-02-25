@@ -6,22 +6,24 @@ import { BarbershopItem } from '../(home)/_components/barbershop-item'
 import { Search } from '../(home)/_components/search'
 
 interface BarbershopPageProps {
-  searchParams: {
+  searchParams: Promise<{
     search?: string
-  }
+  }>
 }
 
 export default async function BarbershopPage({
   searchParams,
 }: BarbershopPageProps) {
-  if (!searchParams.search) {
+  const { search } = await searchParams
+
+  if (!search) {
     return redirect('/')
   }
 
   const barbershops = await db.barbershop.findMany({
     where: {
       name: {
-        contains: searchParams.search,
+        contains: search,
         mode: 'insensitive',
       },
     },
@@ -34,11 +36,11 @@ export default async function BarbershopPage({
       <div className="px-5 py-6 flex flex-col gap-6">
         <Search
           defaultValues={{
-            search: searchParams.search,
+            search,
           }}
         />
         <h1 className="text-gray-400 font-bold text-xs uppercase">
-          Resultados para &quot;{searchParams.search}&quot;
+          Resultados para &quot;{search}&quot;
         </h1>
 
         <div className="grid grid-cols-2 gap-4">
