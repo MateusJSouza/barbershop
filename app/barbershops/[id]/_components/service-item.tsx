@@ -6,7 +6,7 @@ import { ptBR } from 'date-fns/locale/pt-BR'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -38,7 +38,6 @@ export default function ServiceItem({
   barbershop,
 }: ServiceItemProps) {
   const router = useRouter()
-  const { data } = useSession()
 
   const [date, setDate] = useState<Date | undefined>(undefined)
   const [hour, setHour] = useState<string | undefined>(undefined)
@@ -79,7 +78,7 @@ export default function ServiceItem({
     setSubmitIsLoading(true)
 
     try {
-      if (!hour || !date || !data?.user) {
+      if (!hour || !date) {
         return
       }
 
@@ -93,7 +92,6 @@ export default function ServiceItem({
         serviceId: service.id,
         barbershopId: barbershop.id,
         date: newDate,
-        userId: (data.user as any).id,
       })
 
       setSheetIsOpen(false)
