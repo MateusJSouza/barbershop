@@ -41,6 +41,24 @@ NEXT_AUTH_SECRET="..."
 >
 > Gere um `NEXT_AUTH_SECRET` com: `openssl rand -base64 32`
 
+### Autenticação Google (setup)
+
+A autenticação usa next-auth 4 com o Google provider (`app/_lib/auth.ts`) e o Prisma Adapter, que persiste `User`, `Account`, `Session` e `VerificationToken` no Postgres. Para obter as credenciais:
+
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/) e crie/selecione um projeto.
+2. Em **APIs & Services → OAuth consent screen**, configure o tipo **External**, preencha nome do app, e-mails de suporte e os escopos básicos (`userinfo.email`, `userinfo.profile`, `openid`).
+3. Em **APIs & Services → Credentials → Create Credentials → OAuth client ID**, escolha **Web application**.
+4. Em **Authorized JavaScript origins**, adicione:
+   - `http://localhost:3000` (dev)
+   - a URL de produção (ex.: `https://barbershop-seven-plum.vercel.app`)
+5. Em **Authorized redirect URIs**, adicione exatamente (o next-auth v4 espera este path):
+   - `http://localhost:3000/api/auth/callback/google` (dev)
+   - `https://<SUA-URL-PROD>/api/auth/callback/google` (prod)
+6. Copie o **Client ID** e o **Client Secret** gerados para `GOOGLE_CLIENT_ID` e `GOOGLE_CLIENT_SECRET` no `.env`.
+7. Defina `NEXTAUTH_URL` com a mesma URL usada nas origins/redirect (em dev, `http://localhost:3000`; a ausência dessa variável é a causa nº1 de `redirect_uri_mismatch`).
+
+> O estado _Testing_ do consent screen libera login só para usuários de teste; publique o app quando for pra prod. next-auth v4 não usa `GOOGLE_CLIENT_SECRET` vazio — os dois valores são obrigatórios.
+
 ## Setup
 
 ```bash

@@ -25,8 +25,12 @@ npx prisma studio
 ## Required env vars (create `.env` — gitignored)
 
 - `DATABASE_URL` — e.g. `postgresql://postgres:password@localhost:5432/barbershop?schema=public`
-- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — Google OAuth credentials
-- `NEXT_AUTH_SECRET` — next-auth session secret
+- `DIRECT_URL` — direct connection for migrations (Supabase pooled `DATABASE_URL` blocks migrations)
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` — Google OAuth credentials (see README "Autenticação Google (setup)" for how to obtain them and the exact redirect URIs)
+- `NEXT_AUTH_SECRET` — next-auth session secret (`openssl rand -base64 32`)
+- `NEXTAUTH_URL` — site URL; must match the Google OAuth **Authorized redirect URIs** (`.../api/auth/callback/google`) or you get `redirect_uri_mismatch`
+
+Google redirect URIs (next-auth v4 path): `http://localhost:3000/api/auth/callback/google` and `https://<prod>/api/auth/callback/google`.
 
 Without these, auth + DB fail at runtime.
 
