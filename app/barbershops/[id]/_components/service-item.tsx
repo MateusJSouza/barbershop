@@ -4,6 +4,7 @@ import { Barbershop, Booking, Service } from '@prisma/client'
 import { addDays, format, setHours, setMinutes } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
 import { Loader2 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -11,7 +12,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import { Button } from '@/app/_components/ui/button'
-import { Calendar } from '@/app/_components/ui/calendar'
 import { Card, CardContent } from '@/app/_components/ui/card'
 import {
   Sheet,
@@ -25,6 +25,11 @@ import {
 import getDayBookings from '../_actions/get-day-bookings'
 import saveBooking from '../_actions/save-booking'
 import { generateDayTimeList } from '../_helpers/hours'
+
+const Calendar = dynamic(
+  () => import('@/app/_components/ui/calendar').then((m) => m.Calendar),
+  { ssr: false },
+)
 
 interface ServiceItemProps {
   service: Service
